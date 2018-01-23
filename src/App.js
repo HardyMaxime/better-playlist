@@ -10,7 +10,7 @@ let fakeServerData = {
     name : 'Maxime',
     playlists : [
       {
-        name : 'Justice songs',
+        name : 'Justice',
         songs :
         [
             {name:'D.A.N.C.E', duration: 180},
@@ -19,7 +19,7 @@ let fakeServerData = {
         ]
       },
       {
-        name : 'Tame Impala songs',
+        name : 'Tame Impala',
         songs :
         [
             {name:'Ouioui', duration: 180},
@@ -70,8 +70,7 @@ class Filter extends Component {
     return (
       <div className="" style={{...defaultStyle}}>
         <img src="" alt=""/>
-        <input type="text"/>
-        Filter
+        <input type="text" onKeyUp={e => this.props.onTextChange(e.target.value)} />
       </div>
     );
   }
@@ -99,21 +98,19 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      serverData : {}
+      serverData : {},
+      filterString : ''
     }
   }
   componentWillMount() {
     this.setState({
-      serverData : fakeServerData
+      serverData : fakeServerData,
+      filterString : ''
     })
   }
 
-  componentDidMount() {
-    console.log("Composant monté");
-  }
-
   render() {
-    const {serverData} = this.state
+    const {serverData,filterString } = this.state
     return (
       <div className="App">
         <header>
@@ -122,9 +119,13 @@ class App extends Component {
           <HoursCounter playlists={serverData.user.playlists} />
         </header>
         <div className="">
-          <Filter />
+          <Filter onTextChange = {text => this.setState({filterString : text})}  />
           {
-            serverData.user.playlists.map((playlist, index) => {
+            serverData.user.playlists.filter(playlist =>
+              playlist.name
+                .toLowerCase()
+                  .includes(filterString.toLowerCase())
+            ).map((playlist, index) => {
               return <Playlist key={index} playlist={playlist} />
             }
           )}
