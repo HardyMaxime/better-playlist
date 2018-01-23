@@ -40,6 +40,7 @@ let fakeServerData = {
  }
 }
 
+
 class PlaylistCounter extends Component {
   render() {
     return (
@@ -109,14 +110,22 @@ class App extends Component {
     })
   }
 
+
+
   render() {
+
     const {serverData,filterString } = this.state
+
+    let playlistToRender = serverData.user.playlists
+    .filter(playlist => playlist.name.toLowerCase()
+          .includes(filterString.toLowerCase()))
+
     return (
       <div className="App">
         <header>
           <h1>{serverData.user.name}'s Playlists</h1>p>
-          <PlaylistCounter playlists={serverData.user.playlists} />
-          <HoursCounter playlists={serverData.user.playlists} />
+          <PlaylistCounter playlists={playlistToRender} />
+          <HoursCounter playlists={playlistToRender} />
         </header>
         <div className="">
           <Filter onTextChange = {text => this.setState({filterString : text})}  />
