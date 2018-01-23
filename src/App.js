@@ -79,14 +79,15 @@ class Filter extends Component {
 
 class Playlist extends Component {
   render() {
+    const {playlist} = this.props
     return (
       <div className="" style={{...defaultStyle, width: "25%", display: 'inline-block'}}>
         <img src="" alt=""/>
-        <h3>Playlist name</h3>
+        <h3>{playlist.name }</h3>
         <ul>
-          <li>Song 1</li>
-          <li>Song 2</li>
-          <li>Song 3</li>
+        {playlist.songs.map((song, index) => {
+          return  <li key={index}>{song.name}</li>
+        }) }
         </ul>
       </div>
     );
@@ -112,18 +113,21 @@ class App extends Component {
   }
 
   render() {
+    const {serverData} = this.state
     return (
       <div className="App">
         <header>
-          <h1>{this.state.serverData.user.name}'s Playlists</h1>p>
-          <PlaylistCounter playlists={this.state.serverData.user.playlists} />
-          <HoursCounter playlists={this.state.serverData.user.playlists} />
+          <h1>{serverData.user.name}'s Playlists</h1>p>
+          <PlaylistCounter playlists={serverData.user.playlists} />
+          <HoursCounter playlists={serverData.user.playlists} />
         </header>
         <div className="">
           <Filter />
-          <Playlist />
-          <Playlist />
-          <Playlist />
+          {
+            serverData.user.playlists.map((playlist, index) => {
+              return <Playlist key={index} playlist={playlist} />
+            }
+          )}
         </div>
       </div>
     );
